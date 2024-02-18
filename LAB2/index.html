@@ -40,14 +40,16 @@
 
         /* Event handlers for range sliders
         -------------------------------------------------- */
+        function handleSliderChange() {
+            var whichSlider = this.getAttribute("id");
+            var sliderValue = this.value;
+            rgb = changeRgb(whichSlider, sliderValue);
+            var newCSS = writeCSS(rgb);
+            pageBg.style.backgroundColor = newCSS;
+        }
+
         for (var i = 0; i < sliders.length; i++) {
-            sliders[i].onchange = function () {
-                var whichSlider = this.getAttribute("id");
-                var sliderValue = this.value;
-                rgb = changeRgb(whichSlider, sliderValue);
-                var newCSS = writeCSS(rgb);
-                pageBg.style.backgroundColor = newCSS;
-            };
+            sliders[i].addEventListener("input", handleSliderChange);
         }
 
         /* Functions
@@ -69,12 +71,12 @@
 
         function writeCSS(newRgb) {
             var newColor = 'rgb(';
-            var i = 0;
-            while (i < newRgb.length) {
-                newColor += newRgb[i] + ',';
-                i++;
+            for (var i = 0; i < newRgb.length; i++) {
+                newColor += newRgb[i];
+                if (i < newRgb.length - 1) {
+                    newColor += ',';
+                }
             }
-            newColor = newColor.slice(0, -1);
             newColor += ')';
             return newColor;
         }
